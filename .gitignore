@@ -1,0 +1,14 @@
+# test file
+input01
+input02
+input03
+input04
+input05
+
+# vscode configuration
+.vscode/
+
+#make files
+build/
+
+
