@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-04 09:20:13
+ * @LastEditTime: 2021-06-05 16:29:25
  */
 #include <string.h>
 #include <stdio.h>
@@ -96,6 +96,12 @@ static int scanint(int c)
     return val;
 }
 
+/**
+ * @brief get next token from input file
+ * @param t pointer of token 
+ * @return on getting token success, return 1, else if get the end of file return 0
+ * @details: 
+ */
 int scan(struct token *t)
 {
     int c;

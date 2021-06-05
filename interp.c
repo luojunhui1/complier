@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-03 11:19:11
- * @LastEditTime: 2021-06-03 11:43:20
+ * @LastEditTime: 2021-06-05 17:08:21
  */
 #include <stdlib.h>
 
@@ -29,10 +29,10 @@ int interpretAST(struct ASTnode *n) {
     rightval = interpretAST(n->right);
 
   // Debug: Print what we are about to do
-  if (n->op == A_INTLIT)
-    printf("int %d\n", n->intvalue);
-  else
-    printf("%d %s %d\n", leftval, ASTop[n->op], rightval);
+  // if (n->op == A_INTLIT)
+  //   printf("int %d\n", n->intvalue);
+  // else
+  //   printf("%d %s %d\n", leftval, ASTop[n->op], rightval);
 
   switch (n->op) {
     case A_ADD:
