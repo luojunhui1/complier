@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-05 16:29:25
+ * @LastEditTime: 2021-06-07 00:39:57
  */
 #include <string.h>
 #include <stdio.h>
@@ -97,6 +97,54 @@ static int scanint(int c)
 }
 
 /**
+ * @brief scan indentifier from input file and store it in buff[]
+ * @param c first character caned from input file
+ * @param buf pointer of input file or text
+ * @param lim maxium of identifier length
+ * @return the length of identifier
+ * @details: 
+ */
+static int scanident(int c, char *buf, int lim)
+{
+    int i = 0;
+
+    while(isdigit(c) || isalpha(c) || '_' == c)
+    {
+        if(lim - 1 == i)
+        {
+            fprintf(stderr, "identifier too long on line %d\n", Line);
+            exit(1);
+        }
+        else
+        {
+            buf[i++] = c;
+        }
+        c = next();
+    }
+
+    putback(c);
+    buf[i] = '\0';
+
+    return (i);
+}
+
+/**
+ * @brief identify the keyword type of given word
+ * @param s pointer to given word
+ * @return the keyword type of given type
+ * @details: 
+ */
+static int keyword(char *s) {
+  switch (*s) {
+    case 'p':
+      if (!strcmp(s, "print"))
+	return (T_PRINT);
+      break;
+  }
+  return (0);
+}
+
+/**
  * @brief get next token from input file
  * @param t pointer of token 
  * @return on getting token success, return 1, else if get the end of file return 0
@@ -104,7 +152,7 @@ static int scanint(int c)
  */
 int scan(struct token *t)
 {
-    int c;
+    int c,token_type;
 
     c = skip();
 
@@ -125,6 +173,9 @@ int scan(struct token *t)
     case '/':
         t->token = T_OBLIQUE;
         break;
+    case ';':
+        t->token = T_SEMI;
+        break;
     default:
         if(isdigit(c))
         {
@@ -133,6 +184,18 @@ int scan(struct token *t)
             t->intval = scanint(c);
 
             break;
+        }else if(isalpha(c) || '_' == c)
+        {
+            scanident(c, Text, TEXTLEN);
+
+            if(token_type = keyword(Text))
+            {
+                t->token = token_type;
+                break;
+            }
+
+            printf("Unrecognised symbol %s on line %d\n", Text, Line);
+	        exit(1);
         }
         
         printf("Unrecognized character %c on line %d\n", c, Line);

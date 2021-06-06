@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 21:07:22
- * @LastEditTime: 2021-06-05 18:00:33
+ * @LastEditTime: 2021-06-07 00:42:00
  */
 
 #include "defs.h"
@@ -31,28 +31,12 @@ static void usage(char *prog)
 
 char *tokstr[] = {"+", "-", "*", "/", "intlit"};
 
-static void scan_file()
-{
-    struct token t;
-
-    while(scan(&t))
-    {
-        printf("Token %s", tokstr[t.token]);
-
-        if(t.token == T_INTLIT)
-        {
-            printf(", Val = %d", t.intval);
-        }
-
-        printf("\n");
-    }
-}
 
 int main(int argc, char *argv[])
 {
-   struct ASTnode *n;
+    struct ASTnode *n;
 
-    if (argc != 2)
+    if (argc != 3)
         usage(argv[0]);
 
      init();
@@ -63,17 +47,17 @@ int main(int argc, char *argv[])
     }
 
     // Create the output file
-    if ((outFile = fopen("../out.s", "w")) == NULL) {
-        fprintf(stderr, "Unable to create out.s: %s\n", strerror(errno));
+    if ((outFile = fopen(argv[2], "w")) == NULL) {
+        fprintf(stderr, "Unable to create %s: %s\n", argv[2], strerror(errno));
         exit(1);
     }
 
     scan(&Token);			// Get the first token from the input
-    n = binexpr(0);		// Parse the expression in the file
-    printf("%d\n", interpretAST(n));	// Calculate the final result
-    generateCode(n);
     
-    destoryAST(n);
+    genPreamble();
+    statements();
+    genPostamble();
+
     fclose(outFile);
     return (0);
 }

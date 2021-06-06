@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-26 23:36:11
- * @LastEditTime: 2021-06-05 14:19:54
+ * @LastEditTime: 2021-06-07 00:55:24
  */
 #include <string.h>
 #include <stdio.h>
@@ -14,7 +14,7 @@
 #include "decl.h"
 
 // Operator precedence for each token
-static int OpPrec[] = { 0, 10, 10, 20, 20, 0 };
+static int OpPrec[] = { 0, 10, 10, 20, 20, 0};
 
 /**
  * @brief parse a primary factor and return an AST node to present it
@@ -33,6 +33,7 @@ static struct ASTnode *primary(void)
         return n;    
     default:
         fprintf(stderr, "syntax error on line %d\n", Line);
+        exit(1);
     }
 }
 
@@ -94,7 +95,7 @@ struct ASTnode *binexpr(int ptp)
 
     // expression only has one integer literal
     tokentype = Token.token;
-    if(tokentype == T_EOF)
+    if(tokentype == T_SEMI)
         return left;
 
     //because the start precedence  
@@ -108,7 +109,7 @@ struct ASTnode *binexpr(int ptp)
 
         tokentype = Token.token;
 
-        if(tokentype == T_EOF)
+        if(tokentype == T_SEMI)
             return (left);
     }       
     

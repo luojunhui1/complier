@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 17:09:23
- * @LastEditTime: 2021-06-05 17:24:11
+ * @LastEditTime: 2021-06-07 00:37:43
  */
 
 #include <stdlib.h>
@@ -19,7 +19,7 @@
  * @details: the reason that this function can works is the AST is build by precedence, so the operation that each operator node
  * only use its left node value and right node value to caculate its own value can make sense. 
  */
-static int genAST(struct ASTnode *n)
+int genAST(struct ASTnode *n)
 {
     int left_reg, right_reg;
 
@@ -45,6 +45,23 @@ static int genAST(struct ASTnode *n)
         exit(1);
     }
 }
+
+void genPreamble() {
+  cgPreamble();
+}
+
+void genPostamble() {
+  cgPostamble();
+}
+
+void genFreeRegs() {
+  freeAllRegisters();
+}
+
+void genPrintInt(int reg) {
+  cgPrintInt(reg);
+}
+
 
 void generateCode(struct ASTnode *n)
 {
