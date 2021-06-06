@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-27 00:11:24
- * @LastEditTime: 2021-06-05 13:37:20
+ * @LastEditTime: 2021-06-07 02:00:06
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +35,7 @@ struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *right, i
     n->op = op;
     n->left = left;
     n->right = right;
-    n->intvalue = value;
+    n->v.intvalue = value;
 
     return (n);
 }

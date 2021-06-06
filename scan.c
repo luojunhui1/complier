@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-07 00:39:57
+ * @LastEditTime: 2021-06-07 01:29:59
  */
 #include <string.h>
 #include <stdio.h>
@@ -136,10 +136,14 @@ static int scanident(int c, char *buf, int lim)
  */
 static int keyword(char *s) {
   switch (*s) {
-    case 'p':
-      if (!strcmp(s, "print"))
-	return (T_PRINT);
-      break;
+    case 'i':
+        if (!strcmp(s, "int"))
+            return (T_INT);
+        break;
+  case 'p':
+        if (!strcmp(s, "print"))
+            return (T_PRINT);
+        break;
   }
   return (0);
 }
@@ -176,6 +180,9 @@ int scan(struct token *t)
     case ';':
         t->token = T_SEMI;
         break;
+    case '=':
+    t->token = T_EQUALS;
+        break;
     default:
         if(isdigit(c))
         {
@@ -193,13 +200,10 @@ int scan(struct token *t)
                 t->token = token_type;
                 break;
             }
-
-            printf("Unrecognised symbol %s on line %d\n", Text, Line);
-	        exit(1);
+            t->token = T_IDENT;
+            break;
         }
-        
-        printf("Unrecognized character %c on line %d\n", c, Line);
-        exit(1);
+        fatalc("Unrecognised character", c);
     }
 
     return 1;

@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 17:25:12
- * @LastEditTime: 2021-06-05 17:57:41
+ * @LastEditTime: 2021-06-07 01:58:44
  */
 #include <stdlib.h>
 
@@ -115,7 +115,7 @@ void cgPostamble()
  * @return Return the number of the register
  * @details: 
  */
-int cgLoad(int value) {
+int cgLoadInt(int value) {
 
   // Get a new register
   int r= allocRegister();
@@ -190,4 +190,41 @@ void cgPrintInt(int r) {
   fprintf(outFile, "\tmovq\t%s, %%rdi\n", reglist[r]);
   fprintf(outFile, "\tcall\tprintint\n");
   freeRegister(r);
+}
+
+/**
+ * @brief Store a register's value into a variable
+ * @param r register id
+ * @param identifier identifier name
+ * @return {*}
+ * @details: 
+ */
+int cgStorGlob(int r, char *identifier) {
+  fprintf(outFile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r], identifier);
+  return (r);
+}
+
+/**
+ * @brief Generate a global symbol
+ * @param sym global variable name
+ * @return {*}
+ * @details: 
+ */
+void cgGlobSym(char *sym) {
+  fprintf(outFile, "\t.comm\t%s,8,8\n", sym);
+}
+
+/**
+ * @brief Load a value from a variable into a register
+ * @param identifier pointer to identifier name
+ * @return Return the number of the register
+ * @details: 
+ */
+int cgLoadGlob(char *identifier) {
+  // Get a new register
+  int r = allocRegister();
+
+  // Print out the code to initialise it
+  fprintf(outFile, "\tmovq\t%s(\%%rip), %s\n", identifier, reglist[r]);
+  return (r);
 }

@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-26 23:36:11
- * @LastEditTime: 2021-06-07 00:55:24
+ * @LastEditTime: 2021-06-07 02:14:30
  */
 #include <string.h>
 #include <stdio.h>
@@ -24,17 +24,25 @@ static int OpPrec[] = { 0, 10, 10, 20, 20, 0};
 static struct ASTnode *primary(void)
 {
     struct ASTnode *n;
-
+    int id;
+    
     switch (Token.token)
     {
     case T_INTLIT:
         n = mkastleaf(A_INTLIT, Token.intval);
-        scan(&Token);
-        return n;    
+        break;
+    case T_IDENT:
+        id = findGlob(Text);
+        if(id == -1)
+            fatals("Unknown variable", Text);  
+        n = mkastleaf(A_IDENT, id);
+        break;
     default:
-        fprintf(stderr, "syntax error on line %d\n", Line);
-        exit(1);
+        fatald("Syntax error, token", Token.token);
     }
+
+    scan(&Token);
+    return n;
 }
 
 /**
@@ -55,8 +63,7 @@ int arithop(int tok)
         case T_OBLIQUE:
             return (A_DIVIDE);
         default:
-            fprintf(stderr, "unknown token in arithop() on line %d\n", Line);
-            exit(1);
+             fatald("Syntax error, token", tok);
     }
 }
 
