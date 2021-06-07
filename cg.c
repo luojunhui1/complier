@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 17:25:12
- * @LastEditTime: 2021-06-07 01:58:44
+ * @LastEditTime: 2021-06-07 14:36:45
  */
 #include <stdlib.h>
 
@@ -14,6 +14,7 @@
 // List of available registers and their names
 static int freereg[4];
 static char *reglist[4]= { "%r8", "%r9", "%r10", "%r11" };
+static char *breglist[4] = { "%r8b", "%r9b", "%r10b", "%r11b" };
 
 /**
  * @brief free all common registers for x86-64 plateform
@@ -40,8 +41,7 @@ static int allocRegister(void)
             freereg[i] = 0;
             return (i);
         }
-    fprintf(stderr, "Out of Registers!\n");
-    exit(1);
+    fatal("Out of registers");
 }
 
 /**
@@ -53,8 +53,7 @@ static int allocRegister(void)
 static void freeRegister(int reg)
 {
   if (freereg[reg] != 0) {
-    fprintf(stderr, "Error trying to free register %d\n", reg);
-    exit(1);
+    fatald("Error trying to free register", reg);
   }
   freereg[reg]= 1;
 }
@@ -228,3 +227,26 @@ int cgLoadGlob(char *identifier) {
   fprintf(outFile, "\tmovq\t%s(\%%rip), %s\n", identifier, reglist[r]);
   return (r);
 }
+
+/**
+ * @brief Compare two registers.
+ * @param r1 register index
+ * @param r2 register index
+ * @param how measure to set 0 or 1 to register according to the result of cmpq
+ * @return result of comparation
+ * @details: 
+ */
+static int cgCompare(int r1, int r2, char *how) {
+  fprintf(outFile, "\tcmpq\t%s, %s\n", reglist[r2], reglist[r1]);
+  fprintf(outFile, "\t%s\t%s\n", how, breglist[r2]);
+  fprintf(outFile, "\tandq\t$255,%s\n", reglist[r2]);//make the higest byte to be 0
+  freeRegister(r1);
+  return (r2);
+}
+
+int cgEqual(int r1, int r2) { return(cgCompare(r1, r2, "sete")); }
+int cgNotEqual(int r1, int r2) { return(cgCompare(r1, r2, "setne")); }
+int cgLessThan(int r1, int r2) { return(cgCompare(r1, r2, "setl")); }
+int cgGreaterThan(int r1, int r2) { return(cgCompare(r1, r2, "setg")); }
+int cgLessEqual(int r1, int r2) { return(cgCompare(r1, r2, "setle")); }
+int cgGreaterEqual(int r1, int r2) { return(cgCompare(r1, r2, "setge")); }

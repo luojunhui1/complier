@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 17:09:23
- * @LastEditTime: 2021-06-07 01:58:19
+ * @LastEditTime: 2021-06-07 14:47:31
  */
 
 #include <stdlib.h>
@@ -39,6 +39,18 @@ int genAST(struct ASTnode *n, int reg)
         return cgMul(left_reg, right_reg);
     case A_DIVIDE:
         return cgDiv(left_reg, right_reg);
+    case A_EQ:
+        return (cgEqual(left_reg, right_reg));
+    case A_NE:
+        return (cgNotEqual(left_reg, right_reg));
+     case A_LT:
+        return (cgLessThan(left_reg, right_reg));
+    case A_GT:
+         return (cgGreaterThan(left_reg, right_reg));
+    case A_LE:
+        return (cgLessEqual(left_reg, right_reg));
+    case A_GE:
+        return (cgGreaterEqual(left_reg, right_reg));
     case A_INTLIT:
         return cgLoadInt(n->v.intvalue);
     case A_IDENT:

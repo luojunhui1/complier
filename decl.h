@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:25:30
- * @LastEditTime: 2021-06-07 01:58:29
+ * @LastEditTime: 2021-06-07 14:37:37
  */
 int scan(struct token *t);
 
@@ -43,6 +43,13 @@ void cgPrintInt(int r);
 int cgStorGlob(int r, char *identifier);
 void cgGlobSym(char *sym);
 int cgLoadGlob(char *identifier);
+int cgEqual(int r1, int r2);
+int cgNotEqual(int r1, int r2);
+int cgLessThan(int r1, int r2);
+int cgGreaterThan(int r1, int r2);
+int cgLessEqual(int r1, int r2);
+int cgGreaterEqual(int r1, int r2);
+
 
 // misc.c
 

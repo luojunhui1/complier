@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:08:07
- * @LastEditTime: 2021-06-07 01:50:41
+ * @LastEditTime: 2021-06-07 14:22:19
  */
 #include <stdio.h>
 #include <ctype.h>
@@ -17,10 +17,14 @@
  * is not used here because of the widespread reuse of operators in the design of 
  * C/C++ language
 */
-enum {T_EOF, T_CROSS, T_HORIZONTAL, T_ASTERISK, T_OBLIQUE, T_INTLIT, T_SEMI, T_EQUALS,
-    T_IDENT,
+enum {T_EOF, 
+    T_CROSS, T_HORIZONTAL, T_ASTERISK, T_OBLIQUE, 
+    T_EQ, T_NE,// == !=
+    T_LT, T_GT, T_LE, T_GE,// < > <= >=
+    T_INTLIT, T_SEMI, T_ASSIGN,T_IDENT,
     //key words
-    T_PRINT, T_INT};
+    T_PRINT, T_INT
+};
 
 //Token Structure
 struct token
@@ -31,7 +35,10 @@ struct token
 
 // AST node types
 enum {
-  A_ADD, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, A_INTLIT,A_IDENT, A_LVIDENT, A_ASSIGN
+  A_ADD = 1, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, 
+  A_EQ, A_NE, A_LT, A_GT, A_LE, A_GE,
+  A_INTLIT,
+  A_IDENT, A_LVIDENT, A_ASSIGN
 };
 
 // Abstract Syntax Tree structure

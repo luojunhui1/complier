@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-07 00:27:54
- * @LastEditTime: 2021-06-07 01:59:31
+ * @LastEditTime: 2021-06-07 14:55:18
  */
 #include "defs.h"
 #include "data.h"
@@ -27,6 +27,13 @@ void printStatement(void) {
   semi();
 }
 
+/**
+ * @brief match assignment statement
+ * @param none
+ * @return none
+ * @details when scaner get an indentifier, call this function to ensure that this variable has already been declared and add
+ * this assignment statement into AST as the right node
+ */
 void assignmentStatement(void) {
   struct ASTnode *left, *right, *tree;
   int id;
@@ -41,7 +48,7 @@ void assignmentStatement(void) {
   right = mkastleaf(A_LVIDENT, id);
 
   // Ensure we have an equals sign
-  match(T_EQUALS, "=");
+  match(T_ASSIGN, "=");
 
   // Parse the following expression
   left = binexpr(0);

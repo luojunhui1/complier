@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-27 00:11:24
- * @LastEditTime: 2021-06-07 02:00:06
+ * @LastEditTime: 2021-06-07 14:59:03
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,8 +28,7 @@ struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *right, i
 
     if(n == NULL)
     {
-        fprintf(stderr, "unable to malloc in mkastnode()\n");
-        exit(1);
+      fatal("unable to malloc in mkastnode()\n");
     }
 
     n->op = op;

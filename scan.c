@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-07 01:29:59
+ * @LastEditTime: 2021-06-07 14:54:40
  */
 #include <string.h>
 #include <stdio.h>
@@ -140,7 +140,7 @@ static int keyword(char *s) {
         if (!strcmp(s, "int"))
             return (T_INT);
         break;
-  case 'p':
+    case 'p':
         if (!strcmp(s, "print"))
             return (T_PRINT);
         break;
@@ -181,7 +181,35 @@ int scan(struct token *t)
         t->token = T_SEMI;
         break;
     case '=':
-    t->token = T_EQUALS;
+        if((c = next()) == '=')
+            t->token = T_EQ;
+        else
+        {
+            putback(c);
+            t->token = T_ASSIGN;
+        }
+        break;
+    case '!':
+        if((c = next()) == '=')
+            t->token = T_NE;
+        else
+            fatalc("Unrecognised character", c);
+        break;
+    case '<':
+        if ((c = next()) == '=') {
+            t->token = T_LE;
+        } else {
+            putback(c);
+            t->token = T_LT;
+        }
+        break;
+    case '>':
+        if ((c = next()) == '=') {
+            t->token = T_GE;
+        } else {
+            putback(c);
+            t->token = T_GT;
+        }
         break;
     default:
         if(isdigit(c))

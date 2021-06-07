@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-26 23:36:11
- * @LastEditTime: 2021-06-07 02:14:30
+ * @LastEditTime: 2021-06-07 14:42:48
  */
 #include <string.h>
 #include <stdio.h>
@@ -14,7 +14,12 @@
 #include "decl.h"
 
 // Operator precedence for each token
-static int OpPrec[] = { 0, 10, 10, 20, 20, 0};
+static int OpPrec[] = { 0, //EOF
+                        10, 10, 20, 20,// + - * /
+                        30, 30,        // == !=
+                        40, 40, 40, 40, // < > <= >=
+                        0
+};
 
 /**
  * @brief parse a primary factor and return an AST node to present it
@@ -49,22 +54,14 @@ static struct ASTnode *primary(void)
  * @brief convert a Token into an AST node
  * @param tok type of token (Token.token)
  * @return AST node type  
+ * @details now the convertion from token type to AST node type relyinh on a 1:1 mapping from token to AST operation,
+ * so this function only used to determine whether the token type is vaild or not
 **/
 int arithop(int tok)
 {
-    switch(tok)
-    {
-        case T_CROSS:
-            return (A_ADD);
-        case T_HORIZONTAL:
-            return (A_SUBTRACT);
-        case T_ASTERISK:
-            return (A_MULTIPLY);
-        case T_OBLIQUE:
-            return (A_DIVIDE);
-        default:
-             fatald("Syntax error, token", tok);
-    }
+    if(tok < T_INTLIT && tok > T_EOF)
+        return tok;
+    fatald("Syntax error, token", tok);
 }
 
 /**
