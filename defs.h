@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:08:07
- * @LastEditTime: 2021-06-08 12:46:46
+ * @LastEditTime: 2021-06-08 15:57:49
  */
 #include <stdio.h>
 #include <ctype.h>
@@ -24,7 +24,7 @@ enum {T_EOF,
     T_INTLIT, T_SEMI, T_ASSIGN,T_IDENT,
     T_LBRACE, T_RBRACE, T_LPAREN, T_RPAREN,//{ , } , (, ) 
     //key words
-    T_PRINT, T_INT, T_IF, T_ELSE
+    T_PRINT, T_INT, T_IF, T_ELSE, T_WHILE
 };
 
 //Token Structure
@@ -38,8 +38,9 @@ struct token
 enum {
   A_ADD = 1, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, 
   A_EQ, A_NE, A_LT, A_GT, A_LE, A_GE,
-  A_INTLIT,
-  A_IDENT, A_LVIDENT, A_ASSIGN, A_PRINT, A_GLUE, A_IF
+  A_INTLIT,    
+  A_IDENT, A_LVIDENT, A_ASSIGN, A_PRINT, A_GLUE,
+  A_IF, A_WHILE
 };
 
 // Abstract Syntax Tree structure

@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 17:09:23
- * @LastEditTime: 2021-06-08 14:52:35
+ * @LastEditTime: 2021-06-08 16:08:41
  */
 
 #include <stdlib.h>
@@ -58,6 +58,39 @@ static int genIFAST(struct ASTnode *n) {
 
   return (NOREG);
 }
+
+/**
+ * @brief Generate the code for a WHILE statement and an optional ELSE clause
+ * @param n root node of AST
+ * @return -1
+ * @details: 
+ */
+static int genWHILE(struct ASTnode *n) {
+  int Lstart, Lend;
+
+  // Generate the start and end labels
+  // and output the start label
+  Lstart = label();
+  Lend = label();
+  cgLabel(Lstart);
+
+  // Generate the condition code followed
+  // by a jump to the end label.
+  // We cheat by sending the Lfalse label as a register.
+  genAST(n->left, Lend, n->op);
+  genFreeRegs();
+
+  // Generate the compound statement for the body
+  genAST(n->right, NOREG, n->op);
+  genFreeRegs();
+
+  // Finally output the jump back to the condition,
+  // and the end label
+  cgJump(Lstart);
+  cgLabel(Lend);
+  return (NOREG);
+}
+
 /**
  * @brief generate assembly code from AST
  * @param n root node of AST
@@ -73,9 +106,11 @@ int genAST(struct ASTnode *n, int reg, int parentASTop)
     case A_IF:
       return (genIFAST(n));
         break;
+    case A_WHILE:
+        return (genWHILE(n));
+        break;
     case A_GLUE:
-      // Do each child statement, and free the
-      // registers after each child
+      // Do each child statement, and free the registers after each child
       genAST(n->left, NOREG, n->op);
       genFreeRegs();
       genAST(n->right, NOREG, n->op);

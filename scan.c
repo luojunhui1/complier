@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-08 15:01:38
+ * @LastEditTime: 2021-06-08 15:58:25
  */
 #include <string.h>
 #include <stdio.h>
@@ -149,6 +149,10 @@ static int keyword(char *s) {
     case 'p':
         if (!strcmp(s, "print"))
             return (T_PRINT);
+        break;
+    case 'w':
+        if(!strcmp(s, "while"))
+            return (T_WHILE);
         break;
   }
   return (0);
