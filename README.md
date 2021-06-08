@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 15:45:23
- * @LastEditTime: 2021-06-07 21:24:53
+ * @LastEditTime: 2021-06-08 15:12:30
 -->
 # COMPLIER
 <p align="center">
@@ -11,6 +11,7 @@
     <img alt="csharp-version" src="https://img.shields.io/badge/C%23-8.0-blue.svg"></img>
     <img alt="IDE-version" src="https://img.shields.io/badge/IDE-vs2019-blue.svg"></img>
     <img alt="cmake-version" src="https://img.shields.io/badge/CMake-3.17.3-blue.svg"></img>
+    <img alt="Lisense" src="https://img.shields.io/badge/Lisense-GPL3-green.svg"></img>
 </p>
 
 # 简介
@@ -24,6 +25,7 @@
 
 # 参考
 https://github.com/DoctorWkt/acwj 
+
 https://en.cppreference.com/w/c/language/operator_precedence
 
 # 杂
@@ -35,6 +37,7 @@ https://en.cppreference.com/w/c/language/operator_precedence
 - NFA的不确定性： 通过上一个方法一并解决
 
 再将NFA转化为DFA之后，再将DFA中的状态集划分为几个闭包，将到达终态所有路径相同的状态合并为一个状态，以此简化DFA中的状态数目，这一过程通过递归地计算集合中的闭包来完成。（最小化算法）
+
 
 
  

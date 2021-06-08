@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 17:25:12
- * @LastEditTime: 2021-06-07 14:36:45
+ * @LastEditTime: 2021-06-08 14:52:24
  */
 #include <stdlib.h>
 
@@ -228,25 +228,46 @@ int cgLoadGlob(char *identifier) {
   return (r);
 }
 
-/**
- * @brief Compare two registers.
- * @param r1 register index
- * @param r2 register index
- * @param how measure to set 0 or 1 to register according to the result of cmpq
- * @return result of comparation
- * @details: 
- */
-static int cgCompare(int r1, int r2, char *how) {
+// List of comparison instructions, in AST order: A_EQ, A_NE, A_LT, A_GT, A_LE, A_GE
+static char *cmplist[] =
+  { "sete", "setne", "setl", "setg", "setle", "setge" };
+
+// Compare two registers and set if true.
+int cgCompareAndSet(int ASTop, int r1, int r2) {
+
+  // Check the range of the AST operation
+  if (ASTop < A_EQ || ASTop > A_GE)
+    fatal("Bad ASTop in cgcompare_and_set()");
+
   fprintf(outFile, "\tcmpq\t%s, %s\n", reglist[r2], reglist[r1]);
-  fprintf(outFile, "\t%s\t%s\n", how, breglist[r2]);
-  fprintf(outFile, "\tandq\t$255,%s\n", reglist[r2]);//make the higest byte to be 0
+  fprintf(outFile, "\t%s\t%s\n", cmplist[ASTop - A_EQ], breglist[r2]);
+  fprintf(outFile, "\tmovzbq\t%s, %s\n", breglist[r2], reglist[r2]);
   freeRegister(r1);
   return (r2);
 }
 
-int cgEqual(int r1, int r2) { return(cgCompare(r1, r2, "sete")); }
-int cgNotEqual(int r1, int r2) { return(cgCompare(r1, r2, "setne")); }
-int cgLessThan(int r1, int r2) { return(cgCompare(r1, r2, "setl")); }
-int cgGreaterThan(int r1, int r2) { return(cgCompare(r1, r2, "setg")); }
-int cgLessEqual(int r1, int r2) { return(cgCompare(r1, r2, "setle")); }
-int cgGreaterEqual(int r1, int r2) { return(cgCompare(r1, r2, "setge")); }
+// Generate a label
+void cgLabel(int l) {
+  fprintf(outFile, "L%d:\n", l);
+}
+
+// Generate a jump to a label
+void cgJump(int l) {
+  fprintf(outFile, "\tjmp\tL%d\n", l);
+}
+
+// List of inverted jump instructions, in AST order: A_EQ, A_NE, A_LT, A_GT, A_LE, A_GE
+static char *invcmplist[] = { "jne", "je", "jge", "jle", "jg", "jl" };
+
+// Compare two registers and jump if false.
+int cgCompareAndJump(int ASTop, int r1, int r2, int label) {
+
+  // Check the range of the AST operation
+  if (ASTop < A_EQ || ASTop > A_GE)
+    fatal("Bad ASTop in cgcompare_and_set()");
+
+  fprintf(outFile, "\tcmpq\t%s, %s\n", reglist[r2], reglist[r1]);
+  fprintf(outFile, "\t%s\tL%d\n", invcmplist[ASTop - A_EQ], label);
+  freeAllRegisters();
+  return (NOREG);
+}

@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 21:07:22
- * @LastEditTime: 2021-06-07 00:42:00
+ * @LastEditTime: 2021-06-08 14:53:39
  */
 
 #include "defs.h"
@@ -55,7 +55,8 @@ int main(int argc, char *argv[])
     scan(&Token);			// Get the first token from the input
     
     genPreamble();
-    statements();
+    n = compoundStatement();
+    genAST(n, NOREG, 0);	// Generate the assembly code for it
     genPostamble();
 
     fclose(outFile);

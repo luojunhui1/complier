@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-07 14:54:40
+ * @LastEditTime: 2021-06-08 15:01:38
  */
 #include <string.h>
 #include <stdio.h>
@@ -136,7 +136,13 @@ static int scanident(int c, char *buf, int lim)
  */
 static int keyword(char *s) {
   switch (*s) {
+    case 'e':
+        if(!strcmp(s, "else"))
+            return (T_ELSE);
+        break;
     case 'i':
+        if(!strcmp(s, "if"))
+            return (T_IF);
         if (!strcmp(s, "int"))
             return (T_INT);
         break;
@@ -180,6 +186,18 @@ int scan(struct token *t)
     case ';':
         t->token = T_SEMI;
         break;
+    case '{':
+      t->token = T_LBRACE;
+      break;
+    case '}':
+      t->token = T_RBRACE;
+      break;
+    case '(':
+      t->token = T_LPAREN;
+      break;
+    case ')':
+      t->token = T_RPAREN;
+      break;
     case '=':
         if((c = next()) == '=')
             t->token = T_EQ;

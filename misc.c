@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-07 00:21:28
- * @LastEditTime: 2021-06-07 01:27:36
+ * @LastEditTime: 2021-06-08 14:55:55
  */
 #include <stdlib.h>
 
@@ -31,6 +31,27 @@ void semi(void) {
   match(T_SEMI, ";");
 }
 
+
+// Match a left brace and fetch the next token
+void lbrace(void) {
+  match(T_LBRACE, "{");
+}
+
+// Match a right brace and fetch the next token
+void rbrace(void) {
+  match(T_RBRACE, "}");
+}
+
+// Match a left parenthesis and fetch the next token
+void lparen(void) {
+  match(T_LPAREN, "(");
+}
+
+// Match a right parenthesis and fetch the next token
+void rparen(void) {
+  match(T_RPAREN, ")");
+}
+
 // Match an identifer and fetch the next token
 void ident(void) {
   match(T_IDENT, "identifier");
@@ -38,7 +59,8 @@ void ident(void) {
 
 // Print out fatal messages
 void fatal(char *s) {
-  fprintf(stderr, "%s on line %d\n", s, Line); exit(1);
+  fprintf(stderr, "%s on line %d\n", s, Line);
+  exit(1);
 }
 
 void fatals(char *s1, char *s2) {

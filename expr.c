@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-26 23:36:11
- * @LastEditTime: 2021-06-07 14:42:48
+ * @LastEditTime: 2021-06-08 12:56:27
  */
 #include <string.h>
 #include <stdio.h>
@@ -97,9 +97,9 @@ struct ASTnode *binexpr(int ptp)
     // get the integer literal and  fetch the next token
     left = primary();
 
-    // expression only has one integer literal
+    // when the scanner hit the ',' or ')', just return a left node
     tokentype = Token.token;
-    if(tokentype == T_SEMI)
+    if(tokentype == T_SEMI || tokentype == T_RPAREN)
         return left;
 
     //because the start precedence  
@@ -109,11 +109,11 @@ struct ASTnode *binexpr(int ptp)
 
         right = (binexpr(OpPrec[tokentype]));
 
-        left = mkastnode(arithop(tokentype), left, right, 0);
+        left = mkastnode(arithop(tokentype), left, NULL, right, 0);
 
         tokentype = Token.token;
 
-        if(tokentype == T_SEMI)
+        if(tokentype == T_SEMI || tokentype == T_RPAREN)
             return (left);
     }       
     

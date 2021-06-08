@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-27 00:11:24
- * @LastEditTime: 2021-06-07 14:59:03
+ * @LastEditTime: 2021-06-08 14:39:36
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +20,7 @@
  * @param value AST node's integer literal value  
  * @return AST node pointer
 **/
-struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *right, int value)
+struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *mid, struct ASTnode *right, int value)
 {
     struct ASTnode *n;
 
@@ -33,6 +33,7 @@ struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *right, i
 
     n->op = op;
     n->left = left;
+    n->mid = mid;
     n->right = right;
     n->v.intvalue = value;
 
@@ -46,7 +47,7 @@ struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *right, i
  * @return AST node pointer
 **/
 struct ASTnode *mkastleaf(int op, int intvalue) {
-  return (mkastnode(op, NULL, NULL, intvalue));
+  return (mkastnode(op, NULL, NULL, NULL, intvalue));
 }
 
 /**
@@ -57,7 +58,7 @@ struct ASTnode *mkastleaf(int op, int intvalue) {
  * @return AST node pointer
 **/
 struct ASTnode *mkastunary(int op, struct ASTnode *left, int intvalue) {
-  return (mkastnode(op, left, NULL, intvalue));
+  return (mkastnode(op, left, NULL, NULL, intvalue));
 }
 
 
