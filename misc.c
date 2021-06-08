@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-07 00:21:28
- * @LastEditTime: 2021-06-08 14:55:55
+ * @LastEditTime: 2021-06-08 16:28:21
  */
 #include <stdlib.h>
 
@@ -21,8 +21,7 @@ void match(int t, char *what) {
   if (Token.token == t) {
     scan(&Token);
   } else {
-    printf("%s expected on line %d\n", what, Line);
-    exit(1);
+    fatals("expected ", what);
   }
 }
 

@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 21:07:22
- * @LastEditTime: 2021-06-08 14:53:39
+ * @LastEditTime: 2021-06-08 16:38:45
  */
 
 #include "defs.h"
@@ -36,10 +36,10 @@ int main(int argc, char *argv[])
 {
     struct ASTnode *n;
 
-    if (argc != 3)
+    if (argc != 4)
         usage(argv[0]);
 
-     init();
+    init();
 
     if ((inFile = fopen(argv[1], "r")) == NULL) {
         fprintf(stderr, "Unable to open %s: %s\n", argv[1], strerror(errno));
@@ -51,7 +51,12 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Unable to create %s: %s\n", argv[2], strerror(errno));
         exit(1);
     }
-
+    
+    if ((wordFile = fopen(argv[3], "w")) == NULL) {
+        fprintf(stderr, "Unable to create %s: %s\n", argv[3], strerror(errno));
+        exit(1);
+    }
+    
     scan(&Token);			// Get the first token from the input
     
     genPreamble();
@@ -60,5 +65,6 @@ int main(int argc, char *argv[])
     genPostamble();
 
     fclose(outFile);
+    fclose(wordFile);
     return (0);
 }

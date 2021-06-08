@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-08 15:58:25
+ * @LastEditTime: 2021-06-08 16:44:09
  */
 #include <string.h>
 #include <stdio.h>
@@ -12,6 +12,15 @@
 #include "defs.h"
 #include "decl.h"
 #include "data.h"
+
+static char *tokens[] = {"EOF", 
+                  "+", "-", "*", "/",
+                  "==", "!=",
+                  "<", ">", "<=", ">=",
+                  "Val", ",", "=", "Var",
+                  "{", "}", "(", ")",
+                  "print", "int", "if", "else", "while"
+};
 
 /**
  * @brief find the postion of c in string s
@@ -256,5 +265,11 @@ int scan(struct token *t)
         fatalc("Unrecognised character", c);
     }
 
+    if(t->token == T_INTLIT)
+        fprintf(wordFile, "%s\t%d\t\n", tokens[t->token], t->intval);
+    else if(t->token == T_IDENT)
+        fprintf(wordFile, "%s\t%s\t\n", tokens[t->token], Text);
+    else
+        fprintf(wordFile, "%s\t%s\t\n", tokens[t->token], "-");
     return 1;
 }
