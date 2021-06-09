@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-05 15:45:23
- * @LastEditTime: 2021-06-09 18:37:11
+ * @LastEditTime: 2021-06-10 00:30:13
 -->
 # COMPLIER
 <p align="center">
@@ -23,6 +23,9 @@
 # 设计思想
 主要使用`BNF`(巴斯克范式)作为文法的分析工具，使用`有限自动机`进行语法构造，而使用`AST`(抽象语法树)来进行自底向上的语法表达。
 
+# 前端
+前端太拉了，写好前端还是很有用的，这次不放。
+
 # 参考
 https://github.com/DoctorWkt/acwj 
 
@@ -40,8 +43,9 @@ https://en.cppreference.com/w/c/language/operator_precedence
 
 ## 自上而下：
 自上而下在语法分析上直接面临着两个问题：
-    - 左递归
-    - 回溯
+- 左递归
+- 回溯
+
 前者会导致语法的分析陷入无限的循环，即语法分析树不断增长，但分析却可能停滞；后者导致语法的分析过程中过了许多不必要的开销。前者有分为直接左递归和间接左递归，直接左递归的消除通过规范产生式的形式（将形如P->Pa|Pb|...|c|d的产生式转换为右递归文法）来完成，而对于间接左递归，通过对文法中的的所有非终结符进行排序，按序运行以下算法即可消除文法中的左递归
 
 ![](https://cdn.jsdelivr.net/gh/luojunhui1/BlogPicture/Windows/20210609171151.png)
@@ -51,3 +55,5 @@ https://en.cppreference.com/w/c/language/operator_precedence
 对于自上而下的分析器，在实现上选择`递归下降子程序`来进行语法分析，它的结构通常如下：
 ![](https://cdn.jsdelivr.net/gh/luojunhui1/BlogPicture/Windows/20210609180122.png)
 
+## 自下而上：
+ 
