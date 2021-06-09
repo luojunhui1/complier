@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:26:42
- * @LastEditTime: 2021-06-08 16:44:09
+ * @LastEditTime: 2021-06-09 15:13:40
  */
 #include <string.h>
 #include <stdio.h>
@@ -122,7 +122,7 @@ static int scanident(int c, char *buf, int lim)
         if(lim - 1 == i)
         {
             fprintf(stderr, "identifier too long on line %d\n", Line);
-            exit(1);
+            return (1);
         }
         else
         {

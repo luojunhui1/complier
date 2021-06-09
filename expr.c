@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-26 23:36:11
- * @LastEditTime: 2021-06-08 12:56:27
+ * @LastEditTime: 2021-06-09 15:13:31
  */
 #include <string.h>
 #include <stdio.h>
@@ -77,7 +77,7 @@ static int op_precedence(int tokentype)
     if(prec == 0)
     {
         fprintf(stderr, "syntax error on line %d, token %d\n", Line, tokentype);
-        exit(1);
+        return (1);
     }
 
     return (prec);

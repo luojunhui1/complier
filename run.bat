@@ -1,6 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
+@REM 当不将文件作为动态库编译时，可使用该windows bat脚本对程序进行运行
+
 set /p var1=input file:
 set /p var2=output file:
 set /p var3=words split result ouput file:

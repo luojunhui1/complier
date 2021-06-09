@@ -3,9 +3,11 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:25:30
- * @LastEditTime: 2021-06-08 14:50:55
+ * @LastEditTime: 2021-06-09 16:22:49
  */
+
 int scan(struct token *t);
+int analysis();
 
 //tree.c
 
@@ -59,10 +61,10 @@ void rbrace(void);
 void lparen(void);
 void rparen(void);
 void ident(void);
-void fatal(char *s);
-void fatals(char *s1, char *s2);
-void fatald(char *s, int d);
-void fatalc(char *s, int c);
+int fatal(char *s);
+int fatals(char *s1, char *s2);
+int fatald(char *s, int d);
+int fatalc(char *s, int c);
 
 //stmt.c
 

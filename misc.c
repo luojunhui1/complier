@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-06-07 00:21:28
- * @LastEditTime: 2021-06-08 16:28:21
+ * @LastEditTime: 2021-06-09 15:12:33
  */
 #include <stdlib.h>
 
@@ -57,19 +57,19 @@ void ident(void) {
 }
 
 // Print out fatal messages
-void fatal(char *s) {
+int fatal(char *s) {
   fprintf(stderr, "%s on line %d\n", s, Line);
-  exit(1);
+  return(1);
 }
 
-void fatals(char *s1, char *s2) {
-  fprintf(stderr, "%s:%s on line %d\n", s1, s2, Line); exit(1);
+int fatals(char *s1, char *s2) {
+  fprintf(stderr, "%s:%s on line %d\n", s1, s2, Line); return (1);
 }
 
-void fatald(char *s, int d) {
-  fprintf(stderr, "%s:%d on line %d\n", s, d, Line); exit(1);
+int fatald(char *s, int d) {
+  fprintf(stderr, "%s:%d on line %d\n", s, d, Line); return (1);
 }
 
-void fatalc(char *s, int c) {
-  fprintf(stderr, "%s:%c on line %d\n", s, c, Line); exit(1);
+int fatalc(char *s, int c) {
+  fprintf(stderr, "%s:%c on line %d\n", s, c, Line); return (1);
 }

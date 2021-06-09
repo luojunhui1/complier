@@ -162,7 +162,7 @@ int genAST(struct ASTnode *n, int reg, int parentASTop)
       return (NOREG);
     default:
         fprintf(stderr, "Unknow AST operator %d\n", n->op);
-        exit(1);
+        return (1);
     }
 }
 

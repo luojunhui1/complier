@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 21:07:22
- * @LastEditTime: 2021-06-08 16:38:45
+ * @LastEditTime: 2021-06-09 16:26:54
  */
 
 #include "defs.h"
@@ -23,10 +23,10 @@ static void init()
     Putback = '\0';
 }
 
-static void usage(char *prog)
+static int usage(char *prog)
 {
     fprintf(stderr, "Usage : %s infile\n", prog);
-    exit(1);
+    return (1);
 }
 
 char *tokstr[] = {"+", "-", "*", "/", "intlit"};
@@ -42,28 +42,34 @@ int main(int argc, char *argv[])
     init();
 
     if ((inFile = fopen(argv[1], "r")) == NULL) {
-        fprintf(stderr, "Unable to open %s: %s\n", argv[1], strerror(errno));
-        exit(1);
+        printf("Unable to open %s: %s\n", "inSourceCode", strerror(errno));
+        return 1;
     }
 
     // Create the output file
     if ((outFile = fopen(argv[2], "w")) == NULL) {
-        fprintf(stderr, "Unable to create %s: %s\n", argv[2], strerror(errno));
-        exit(1);
+        printf("Unable to create %s: %s\n", "outAssemblyCode", strerror(errno));
+        return 1;
     }
     
     if ((wordFile = fopen(argv[3], "w")) == NULL) {
-        fprintf(stderr, "Unable to create %s: %s\n", argv[3], strerror(errno));
-        exit(1);
+        printf("Unable to create %s: %s\n", "outWords", strerror(errno));
+        return 1;
     }
     
+    printf("Begin to Scan\n");
+
     scan(&Token);			// Get the first token from the input
     
+    printf("Begin to Generate\n");
     genPreamble();
     n = compoundStatement();
+
+    printf("Begin to build AST\n");
     genAST(n, NOREG, 0);	// Generate the assembly code for it
     genPostamble();
 
+    printf("End Generation\n");
     fclose(outFile);
     fclose(wordFile);
     return (0);
