@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 21:07:22
- * @LastEditTime: 2021-06-09 16:26:54
+ * @LastEditTime: 2021-06-11 15:03:03
  */
 
 #include "defs.h"
@@ -59,12 +59,17 @@ int main(int argc, char *argv[])
     
     printf("Begin to Scan\n");
 
+    int flag;
+    
     scan(&Token);			// Get the first token from the input
     
     printf("Begin to Generate\n");
     genPreamble();
-    n = compoundStatement();
+    n = compoundStatement(&flag);
 
+    if(flag == SYNTAX_ERROR)
+        return 1;
+    
     printf("Begin to build AST\n");
     genAST(n, NOREG, 0);	// Generate the assembly code for it
     genPostamble();

@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-26 23:36:11
- * @LastEditTime: 2021-06-09 15:13:31
+ * @LastEditTime: 2021-06-11 15:01:57
  */
 #include <string.h>
 #include <stdio.h>
@@ -26,11 +26,12 @@ static int OpPrec[] = { 0, //EOF
  * @param none
  * @return an primary AST node pointer
 **/
-static struct ASTnode *primary(void)
+static struct ASTnode *primary(int *flag)
 {
     struct ASTnode *n;
     int id;
     
+    *flag = SYNTAX_CORRECT;
     switch (Token.token)
     {
     case T_INTLIT:
@@ -39,11 +40,17 @@ static struct ASTnode *primary(void)
     case T_IDENT:
         id = findGlob(Text);
         if(id == -1)
+        {
             fatals("Unknown variable", Text);  
+            *flag = SYNTAX_ERROR;
+        }
         n = mkastleaf(A_IDENT, id);
         break;
     default:
+    {
         fatald("Syntax error, token", Token.token);
+        *flag = SYNTAX_ERROR;
+    }
     }
 
     scan(&Token);
@@ -57,11 +64,14 @@ static struct ASTnode *primary(void)
  * @details now the convertion from token type to AST node type relyinh on a 1:1 mapping from token to AST operation,
  * so this function only used to determine whether the token type is vaild or not
 **/
-int arithop(int tok)
+int arithop(int tok, int *flag)
 {
+    *flag = SYNTAX_CORRECT;
+
     if(tok < T_INTLIT && tok > T_EOF)
         return tok;
     fatald("Syntax error, token", tok);
+    *flag = SYNTAX_ERROR;;
 }
 
 /**
@@ -77,7 +87,7 @@ static int op_precedence(int tokentype)
     if(prec == 0)
     {
         fprintf(stderr, "syntax error on line %d, token %d\n", Line, tokentype);
-        return (1);
+        return SYNTAX_ERROR;
     }
 
     return (prec);
@@ -88,14 +98,16 @@ static int op_precedence(int tokentype)
  * @param ptp current operator precedence
  * @return AST node pointer
  */
-struct ASTnode *binexpr(int ptp)
+struct ASTnode *binexpr(int ptp, int *flag)
 {
     struct ASTnode *n, *left, *right;
 
     int tokentype;
     
     // get the integer literal and  fetch the next token
-    left = primary();
+    left = primary(flag);
+    if(*flag == SYNTAX_ERROR)
+        return NULL;
 
     // when the scanner hit the ',' or ')', just return a left node
     tokentype = Token.token;
@@ -107,9 +119,12 @@ struct ASTnode *binexpr(int ptp)
     {
         scan(&Token);
 
-        right = (binexpr(OpPrec[tokentype]));
+        right = (binexpr(OpPrec[tokentype], flag));
+        
+        left = mkastnode(arithop(tokentype, flag), left, NULL, right, 0);
 
-        left = mkastnode(arithop(tokentype), left, NULL, right, 0);
+        if(*flag == SYNTAX_ERROR)
+            return NULL;
 
         tokentype = Token.token;
 

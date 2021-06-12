@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:08:07
- * @LastEditTime: 2021-06-08 16:43:59
+ * @LastEditTime: 2021-06-11 14:15:40
  */
 #include <stdio.h>
 #include <ctype.h>
@@ -11,7 +11,8 @@
 
 #define TEXTLEN		512	// Length of symbols in input
 #define NSYMBOLS        1024	// Number of symbol table entries
-
+#define SYNTAX_ERROR    -1
+#define SYNTAX_CORRECT    1
 /* 
  * Token Types. The common term addition, subtraction, multiplication and division
  * is not used here because of the widespread reuse of operators in the design of 

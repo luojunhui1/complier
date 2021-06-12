@@ -3,7 +3,7 @@
  * @Author: Junhui Luo
  * @Blog: https://luojunhui1.github.io/
  * @Date: 2021-05-24 02:25:30
- * @LastEditTime: 2021-06-09 16:22:49
+ * @LastEditTime: 2021-06-11 14:28:18
  */
 
 int scan(struct token *t);
@@ -18,7 +18,7 @@ struct ASTnode *mkastunary(int op, struct ASTnode *left, int intvalue);
 
 //expr.c
 
-struct ASTnode *binexpr(int ptp);
+struct ASTnode *binexpr(int ptp, int *flag);
 void destoryAST(struct ASTnode *root);
 
 // gen.c
@@ -68,7 +68,7 @@ int fatalc(char *s, int c);
 
 //stmt.c
 
-struct ASTnode *compoundStatement(void);
+struct ASTnode *compoundStatement(int *flag);
 
 // sym.c
 
