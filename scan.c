@@ -17,9 +17,9 @@ static char *tokens[] = {"EOF",
                   "+", "-", "*", "/",
                   "==", "!=",
                   "<", ">", "<=", ">=",
-                  "Val", ",", "=", "Var",
+                  "Val", ";", "=", "Var",
                   "{", "}", "(", ")",
-                  "print", "int", "if", "else", "while"
+                  "print", "int", "if", "else", "while", "for", "void"
 };
 
 /**
@@ -163,6 +163,15 @@ static int keyword(char *s) {
         if(!strcmp(s, "while"))
             return (T_WHILE);
         break;
+    case 'f':
+        if(!strcmp(s, "for"))
+            return (T_FOR);
+        break;
+    case 'v':
+        if (!strcmp(s, "void"))
+            return (T_VOID);
+      break;
+    
   }
   return (0);
 }
@@ -253,16 +262,17 @@ int scan(struct token *t)
         }else if(isalpha(c) || '_' == c)
         {
             scanident(c, Text, TEXTLEN);
-
+            
             if(token_type = keyword(Text))
             {
                 t->token = token_type;
-                break;
             }
-            t->token = T_IDENT;
+            else
+                t->token = T_IDENT;
             break;
         }
-        fatalc("Unrecognised character", c);
+        else
+            fatalc("Unrecognised character", c);
     }
 
     if(t->token == T_INTLIT)
@@ -271,5 +281,6 @@ int scan(struct token *t)
         fprintf(wordFile, "%s\t%s\t\n", tokens[t->token], Text);
     else
         fprintf(wordFile, "%s\t%s\t\n", tokens[t->token], "-");
+
     return 1;
 }

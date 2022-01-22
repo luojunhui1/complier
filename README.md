@@ -30,8 +30,9 @@
 在cmake和其它环境配置好了的情况下，只要在项目目录下命令行中键入
 > ./run
 
-即可，但实际使用该方法需要注意run.bat中的内容，./run后出现的提示输入的文件名均以项目目录为根目录，输入文件默认为input6,输出文件默认为输入文件加上.words和.out后缀。
-若要将本程序编译为动态库以供python或.net、java使用的话，需将CMakeLists.txt更改为如下：
+即可，但实际使用该方法需要注意run.bat中的内容，./run后出现的提示输入的文件名均以项目目录为根目录，输入文件默认为input06,输出文件默认为输入文件名加上.words和.out后缀。
+若要将本程序编译为动态库以供python或.net、java使用，需将CMakeLists.txt更改为如下：
+cmake
 ```
 cmake_minimum_required(VERSION 3.0.0) 
 

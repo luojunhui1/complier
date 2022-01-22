@@ -25,3 +25,30 @@ void varDeclaration(void) {
   genGlobSym(Text);
   semi();
 }
+
+/**
+ * @brief function decalration
+ * @param none
+ * @return struct ASTnode*
+ * @details none 
+ */
+struct ASTnode *functionDeclaration(int *flag) {
+  struct ASTnode *tree;
+  int nameslot;
+
+  // Find the 'void', the identifier, and the '(' ')'.
+  // For now, do nothing with them
+
+  match(T_VOID, "void");
+  ident();
+  nameslot= addGlob(Text);
+  lparen();
+  rparen();
+
+  // Get the AST tree for the compound statement
+  tree= compoundStatement(flag);
+
+  // Return an A_FUNCTION node which has the function's nameslot
+  // and the compound statement sub-tree
+  return(mkastunary(A_FUNCTION, tree, nameslot));
+}

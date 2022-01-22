@@ -21,6 +21,7 @@ void match(int t, char *what) {
   if (Token.token == t) {
     scan(&Token);
   } else {
+    printf("Token.token = %d; t = %d\n", Token.token, t);
     fatals("expected ", what);
   }
 }

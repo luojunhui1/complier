@@ -271,3 +271,16 @@ int cgCompareAndJump(int ASTop, int r1, int r2, int label) {
   freeAllRegisters();
   return (NOREG);
 }
+
+void cgFuncPreamble(char *name) {
+fprintf(outFile,
+        "\t.text\n"
+        "\t.globl\t%s\n"
+        "\t.type\t%s, @function\n"
+        "%s:\n" "\tpushq\t%%rbp\n"
+        "\tmovq\t%%rsp, %%rbp\n", name, name, name);
+}
+
+void cgFuncPostamble() {
+  fputs("\tmovl $0, %eax\n" "\tpopq     %rbp\n" "\tret\n", outFile);
+}

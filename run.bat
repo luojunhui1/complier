@@ -13,6 +13,7 @@ if "%var3%"=="" set var3=%var1%.words
 
 cd build
 cmake ..
+
 make -j
 
 echo [target built]

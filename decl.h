@@ -51,6 +51,8 @@ int cgCompareAndJump(int ASTop, int r1, int r2, int label);
 void cgLabel(int l);
 void cgJump(int l);
 
+void cgFuncPreamble(char *name);
+void cgFuncPostamble();
 
 // misc.c
 
@@ -78,3 +80,4 @@ int addGlob(char *name);
 // decl.c
 
 void varDeclaration(void);
+struct ASTnode *functionDeclaration(int *flag);

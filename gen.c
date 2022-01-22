@@ -116,6 +116,11 @@ int genAST(struct ASTnode *n, int reg, int parentASTop)
       genAST(n->right, NOREG, n->op);
       genFreeRegs();
       return (NOREG);
+    case A_FUNCTION:
+      cgFuncPreamble(Gsym[n->v.id].name);
+      genAST(n->left, NOREG, n->op);
+      cgFuncPostamble();
+      return (NOREG);
     }
 
     int left_reg, right_reg;

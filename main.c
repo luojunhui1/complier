@@ -25,7 +25,7 @@ static void init()
 
 static int usage(char *prog)
 {
-    fprintf(stderr, "Usage : %s infile\n", prog);
+    fprintf(stderr, "Usage : %s dir_of_input_file\n", prog);
     return (1);
 }
 
@@ -60,18 +60,26 @@ int main(int argc, char *argv[])
     printf("Begin to Scan\n");
 
     int flag;
-    
+    struct ASTnode *tree;
+
     scan(&Token);			// Get the first token from the input
     
     printf("Begin to Generate\n");
     genPreamble();
-    n = compoundStatement(&flag);
 
-    if(flag == SYNTAX_ERROR)
-        return 1;
-    
-    printf("Begin to build AST\n");
-    genAST(n, NOREG, 0);	// Generate the assembly code for it
+    while (1) 
+    {                   // Parse a function and
+        tree = functionDeclaration(&flag);
+
+        if(flag == SYNTAX_ERROR)
+            return 1;
+        printf("Begin to build AST\n");
+        genAST(tree, NOREG, 0);     // generate the assembly code for it
+
+        if (Token.token == T_EOF)   // Stop when we have reached EOF
+            break;
+    }
+
     genPostamble();
 
     printf("End Generation\n");
