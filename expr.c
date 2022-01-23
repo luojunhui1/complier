@@ -31,11 +31,14 @@ static struct ASTnode *primary(int *flag)
     struct ASTnode *n;
     int id;
     
-    *flag = SYNTAX_CORRECT;
+    // *flag = SYNTAX_CORRECT;
     switch (Token.token)
     {
     case T_INTLIT:
-        n = mkastleaf(A_INTLIT, Token.intval);
+        if ((Token.intval) >= 0 && (Token.intval < 256))
+            n = mkastleaf(A_INTLIT, P_CHAR, Token.intval);
+        else
+            n = mkastleaf(A_INTLIT, P_INT, Token.intval);
         break;
     case T_IDENT:
         id = findGlob(Text);
@@ -44,7 +47,7 @@ static struct ASTnode *primary(int *flag)
             fatals("Unknown variable", Text);  
             *flag = SYNTAX_ERROR;
         }
-        n = mkastleaf(A_IDENT, id);
+        n = mkastleaf(A_IDENT, Gsym[id].type, id);
         break;
     default:
     {
@@ -66,10 +69,11 @@ static struct ASTnode *primary(int *flag)
 **/
 int arithop(int tok, int *flag)
 {
-    *flag = SYNTAX_CORRECT;
+    // *flag = SYNTAX_CORRECT;
 
     if(tok < T_INTLIT && tok > T_EOF)
         return tok;
+        
     fatald("Syntax error, token", tok);
     *flag = SYNTAX_ERROR;;
 }
@@ -101,7 +105,7 @@ static int op_precedence(int tokentype)
 struct ASTnode *binexpr(int ptp, int *flag)
 {
     struct ASTnode *n, *left, *right;
-
+    int lefttype, righttype;
     int tokentype;
     
     // get the integer literal and  fetch the next token
@@ -121,7 +125,21 @@ struct ASTnode *binexpr(int ptp, int *flag)
 
         right = (binexpr(OpPrec[tokentype], flag));
         
-        left = mkastnode(arithop(tokentype, flag), left, NULL, right, 0);
+        lefttype = left->type;
+        righttype = right->type;
+
+        if (!typeCompatible(&lefttype, &righttype, 0))
+            fatal("Incompatible types");
+
+        // Widen either side if required. type vars are A_WIDEN now
+        if (lefttype)
+            left = mkastunary(lefttype, right->type, left, 0);
+        if (righttype)
+            right = mkastunary(righttype, left->type, right, 0);
+
+        // Join that sub-tree with ours. Convert the token
+        // into an AST operation at the same time.
+        left = mkastnode(arithop(tokentype, flag), left->type, left, NULL, right, 0);
 
         if(*flag == SYNTAX_ERROR)
             return NULL;

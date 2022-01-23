@@ -1,12 +1,12 @@
-void	-	
+(null)	-	
 Var	main	
 (	-	
 )	-	
 {	-	
-int	-	
+if	-	
 Var	i	
 ;	-	
-for	-	
+void	-	
 (	-	
 Var	i	
 =	-	

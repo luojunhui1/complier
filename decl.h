@@ -11,10 +11,10 @@ int analysis();
 
 //tree.c
 
-struct ASTnode *mkastnode(int op, struct ASTnode *left, struct ASTnode *mid,
+struct ASTnode *mkastnode(int op, int type, struct ASTnode *left, struct ASTnode *mid,
 			  struct ASTnode *right, int intvalue);
-struct ASTnode *mkastleaf(int op, int intvalue);
-struct ASTnode *mkastunary(int op, struct ASTnode *left, int intvalue);
+struct ASTnode *mkastleaf(int op, int type, int intvalue);
+struct ASTnode *mkastunary(int op, int type, struct ASTnode *left, int intvalue);
 
 //expr.c
 
@@ -29,7 +29,7 @@ void genPostamble();
 void genFreeRegs();
 void genPrintInt(int reg);
 int interpretAST(struct ASTnode *n);
-void genGlobSym(char *s);
+void genGlobSym(int id);
 
 //cg.c
 
@@ -42,9 +42,10 @@ int cgSub(int r1, int r2);
 int cgMul(int r1, int r2);
 int cgDiv(int r1, int r2);
 void cgPrintInt(int r);
-int cgStorGlob(int r, char *identifier);
-void cgGlobSym(char *sym);
-int cgLoadGlob(char *identifier);
+int cgStorGlob(int r, int id);
+void cgGlobSym(int id);
+int cgLoadGlob(int id);
+int cgWiden(int r, int oldtype, int newtype);
 
 int cgCompareAndSet(int ASTop, int r1, int r2);
 int cgCompareAndJump(int ASTop, int r1, int r2, int label);
@@ -75,9 +76,12 @@ struct ASTnode *compoundStatement(int *flag);
 // sym.c
 
 int findGlob(char *s);
-int addGlob(char *name);
+int addGlob(char *name, int type, int stype);
 
 // decl.c
 
 void varDeclaration(void);
 struct ASTnode *functionDeclaration(int *flag);
+
+//type.c
+int typeCompatible(int *left, int *right, int onlyright);

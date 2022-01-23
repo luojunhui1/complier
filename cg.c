@@ -198,8 +198,25 @@ void cgPrintInt(int r) {
  * @return {*}
  * @details: 
  */
-int cgStorGlob(int r, char *identifier) {
-  fprintf(outFile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r], identifier);
+int cgStorGlob(int r, int id) {
+  if (Gsym[id].type == P_INT)
+    fprintf(outFile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r], Gsym[id].name);
+  else
+    fprintf(outFile, "\tmovb\t%s, %s(\%%rip)\n", breglist[r], Gsym[id].name);
+
+  return (r);
+}
+
+/**
+ * @brief the `cgloadglob()` function has already done the widening of
+P_CHAR variables. So this is the code for our new `cgwiden()` function
+ * @param r 
+ * @param oldtype 
+ * @param newtype 
+ * @return int 
+ */
+int cgWiden(int r, int oldtype, int newtype) {
+  // Nothing to do
   return (r);
 }
 
@@ -209,8 +226,11 @@ int cgStorGlob(int r, char *identifier) {
  * @return {*}
  * @details: 
  */
-void cgGlobSym(char *sym) {
-  fprintf(outFile, "\t.comm\t%s,8,8\n", sym);
+void cgGlobSym(int id) {
+  if (Gsym[id].type == P_INT)
+    fprintf(outFile, "\t.comm\t%s,8,8\n", Gsym[id].name);
+  else
+    fprintf(outFile, "\t.comm\t%s,1,1\n", Gsym[id].name);
 }
 
 /**
@@ -219,12 +239,15 @@ void cgGlobSym(char *sym) {
  * @return Return the number of the register
  * @details: 
  */
-int cgLoadGlob(char *identifier) {
+int cgLoadGlob(int id) {
   // Get a new register
   int r = allocRegister();
 
-  // Print out the code to initialise it
-  fprintf(outFile, "\tmovq\t%s(\%%rip), %s\n", identifier, reglist[r]);
+  if (Gsym[id].type == P_INT)
+    fprintf(outFile, "\tmovq\t%s(\%%rip), %s\n", Gsym[id].name, reglist[r]);
+  else
+    fprintf(outFile, "\tmovzbq\t%s(\%%rip), %s\n", Gsym[id].name, reglist[r]);
+
   return (r);
 }
 

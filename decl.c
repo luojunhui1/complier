@@ -12,17 +12,27 @@
 // Parsing of declarations
 // Copyright (c) 2019 Warren Toomey, GPL3
 
+/**
+ * @brief parse key words to primary types
+ * @param t key word type
+ * @return int primary type index
+ */
+int parseType(int t) {
+  if (t == T_CHAR) return (P_CHAR);
+  if (t == T_INT)  return (P_INT);
+  if (t == T_VOID) return (P_VOID);
+  fatald("Illegal type, token", t);
+}
 
 // Parse the declaration of a variable
 void varDeclaration(void) {
+  int id, type;
 
-  // Ensure we have an 'int' token followed by an identifier
-  // and a semicolon. Text now has the identifier's name.
-  // Add it as a known identifier
-  match(T_INT, "int");
+  type = parseType(Token.token);
+  scan(&Token);
   ident();
-  addGlob(Text);
-  genGlobSym(Text);
+  id = addGlob(Text, type, S_VARIABLE);
+  genGlobSym(id);
   semi();
 }
 
@@ -41,7 +51,7 @@ struct ASTnode *functionDeclaration(int *flag) {
 
   match(T_VOID, "void");
   ident();
-  nameslot= addGlob(Text);
+  nameslot= addGlob(Text, P_NONE, S_FUNCTION);
   lparen();
   rparen();
 
@@ -50,5 +60,5 @@ struct ASTnode *functionDeclaration(int *flag) {
 
   // Return an A_FUNCTION node which has the function's nameslot
   // and the compound statement sub-tree
-  return(mkastunary(A_FUNCTION, tree, nameslot));
+  return(mkastunary(A_FUNCTION, P_VOID, tree, nameslot));
 }

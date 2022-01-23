@@ -153,9 +153,9 @@ int genAST(struct ASTnode *n, int reg, int parentASTop)
     case A_INTLIT:
         return cgLoadInt(n->v.intvalue);
     case A_IDENT:
-        return (cgLoadGlob(Gsym[n->v.id].name));
+        return (cgLoadGlob(n->v.id));
     case A_LVIDENT:
-        return (cgStorGlob(reg, Gsym[n->v.id].name));
+        return (cgStorGlob(reg, n->v.id));
     case A_ASSIGN:
     // The work has already been done, return the result
         return (right_reg);
@@ -165,6 +165,9 @@ int genAST(struct ASTnode *n, int reg, int parentASTop)
       genPrintInt(left_reg);
       genFreeRegs();
       return (NOREG);
+    case A_WIDEN:
+      // Widen the child's type to the parent's type
+      return (cgWiden(left_reg, n->left->type, n->type));
     default:
         fprintf(stderr, "Unknow AST operator %d\n", n->op);
         return (1);
@@ -187,6 +190,6 @@ void genPrintInt(int reg) {
   cgPrintInt(reg);
 }
 
-void genGlobSym(char *s) {
-  cgGlobSym(s);
+void genGlobSym(int id) {
+  cgGlobSym(id);
 }
